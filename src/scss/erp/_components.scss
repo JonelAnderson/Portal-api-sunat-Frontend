@@ -1,0 +1,987 @@
+// =====================================================================
+//  ERP - estilos de componentes (se importa al final de styles.scss)
+// ---------------------------------------------------------------------
+//  Reglas GLOBALES (afectan a todas las pantallas, solo color / radio /
+//  sombra / tipografía, sin cambiar tamaños de layout):
+//    tarjetas, modales, badges light, botones, foco de formularios,
+//    cabecera de tablas Bootstrap (thead sin clase), alertas.
+//  Reglas OPT-IN (solo donde se usa la clase): .erp-page-header,
+//    .erp-section-title, .erp-empty, .erp-loading, .erp-form*, .erp-doc*,
+//    .btn-accent, .text-accent, etc.
+// =====================================================================
+
+// ---------------------------------------------------------------------
+// Tarjetas
+// ---------------------------------------------------------------------
+.card {
+  --bs-card-border-radius: var(--erp-radius);
+  --bs-card-inner-border-radius: var(--erp-radius);
+  border-radius: var(--erp-radius);
+  // Anillo de 1 px con sombra (no suma ancho, no mueve el layout).
+  box-shadow:
+    0 0 0 1px rgba(16, 24, 40, 0.04),
+    var(--erp-shadow-sm);
+
+  &:hover {
+    box-shadow:
+      0 0 0 1px rgba(16, 24, 40, 0.05),
+      var(--erp-shadow-md);
+  }
+
+  // Cabecera antigua (franja celeste sólida): redondea sus esquinas superiores
+  // para que no sobresalga de la tarjeta mientras se migra cada pantalla.
+  > .bg-c-blue:first-child {
+    border-top-left-radius: var(--erp-radius);
+    border-top-right-radius: var(--erp-radius);
+  }
+}
+
+// Cabecera de tarjeta de sección (opt-in): título + acción a la derecha.
+.erp-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--erp-border);
+
+  .erp-card-title {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--erp-text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+
+    > i {
+      color: var(--erp-accent);
+      font-size: 1rem;
+    }
+  }
+
+  a {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--erp-primary-dark);
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+      color: var(--erp-accent-text);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------
+// Cabecera de página (fondo celeste suave). La usa <app-page-header>,
+// y también puede escribirse a mano con estas clases.
+// ---------------------------------------------------------------------
+.erp-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--erp-header-gap);
+  padding: var(--erp-header-pad-y) var(--erp-header-pad-x);
+  background: var(--erp-primary-soft);
+  border-bottom: 1px solid var(--erp-primary-border);
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+
+  // Dentro de .card hereda el radio; suelta (sin tarjeta) lleva el suyo.
+  &.erp-page-header--standalone {
+    border: 1px solid var(--erp-primary-border);
+    border-radius: var(--erp-radius);
+    margin-bottom: 1.25rem;
+  }
+
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    flex: 1 1 16rem;
+  }
+
+  // Ícono del título: naranja dentro de una ficha blanca (3.2:1 sobre blanco).
+  &__icon {
+    flex: 0 0 auto;
+    width: 2.375rem;
+    height: 2.375rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--erp-radius);
+    background: var(--erp-surface);
+    color: var(--erp-accent);
+    box-shadow: 0 1px 2px rgba(38, 92, 153, 0.12);
+    font-size: 1.125rem;
+
+    i {
+      font-size: inherit;
+      line-height: 1;
+    }
+  }
+
+  &__text {
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: var(--erp-title-size);
+    font-weight: var(--erp-title-weight);
+    letter-spacing: var(--erp-title-tracking);
+    line-height: 1.3;
+    color: var(--erp-primary-dark);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  &__subtitle {
+    margin: 0.125rem 0 0;
+    font-size: var(--erp-subtitle-size);
+    color: var(--erp-text-muted);
+    line-height: 1.35;
+  }
+
+  &__help {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--erp-primary-dark);
+    opacity: 0.8;
+    line-height: 1;
+    font-size: 0.95rem;
+    cursor: help;
+    border-radius: 50%;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+      color: var(--erp-accent-text);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--erp-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  &__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  &__filters,
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  // Controles de la cabecera a 40 px y sin la sombra del "glass".
+  .form-select,
+  .form-control {
+    min-height: var(--erp-control-height);
+    border-color: var(--erp-primary-border);
+  }
+
+  .btn {
+    min-height: var(--erp-control-height);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+  }
+
+  // El buscador necesita ancho propio (su host es inline y no tiene ancho fijo).
+  app-search-box-multiple {
+    min-width: 16rem;
+  }
+
+  // Pantallas angostas: título arriba; debajo los filtros en una cuadrícula ordenada y las acciones en una fila.
+  @media (max-width: 767.98px) {
+    padding: 0.75rem 1rem;
+
+    &__tools {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.5rem;
+    }
+
+    // Filtros en dos columnas; el buscador, el rango de fechas y un último filtro impar ocupan todo el ancho.
+    &__filters {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
+
+      > * {
+        width: 100%;
+        min-width: 0 !important;
+      }
+
+      > app-search-box-multiple,
+      > app-filter-date-range-ymd,
+      > *:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+
+      // Con uno o dos filtros, cada uno en su fila (no queda una celda vacía al lado).
+      &:not(:has(> :nth-child(3))) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      // Cada filtro llena su celda (los componentes compartidos tienen ancho propio en escritorio).
+      app-filter-by-state,
+      app-filter-select,
+      app-search-box-multiple,
+      app-filter-date-range-ymd {
+        display: block;
+      }
+
+      .filter-state-wrapper,
+      .filter-state-wrapper .btn-group,
+      .filter-state-wrapper .btn,
+      .filter-select-wrapper,
+      .search-box-wrapper,
+      .search-container,
+      .erp-date-range,
+      > .form-control,
+      > .form-select,
+      > ng-select {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100%;
+      }
+
+      .filter-state-wrapper .btn {
+        justify-content: flex-start;
+      }
+    }
+
+    // Acciones en una fila: los botones con texto se reparten el ancho; los de solo ícono quedan cuadrados.
+    &__actions {
+      width: 100%;
+      flex-wrap: nowrap;
+      justify-content: stretch;
+
+      > .btn,
+      > a.btn {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+
+      > app-button-reset-filters {
+        flex: 0 0 auto;
+      }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1199.98px) {
+    &__tools {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------
+// Títulos de sección (tablero y formularios largos)
+// ---------------------------------------------------------------------
+.erp-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem;
+  font-size: var(--erp-section-title-size);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--erp-text-muted);
+
+  > i:first-child {
+    color: var(--erp-accent);
+    font-size: 1rem;
+  }
+
+  small {
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  &::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--erp-border);
+    margin-left: 0.25rem;
+  }
+}
+
+// ---------------------------------------------------------------------
+// Tablas Bootstrap: cabecera pequeña en mayúsculas sobre fondo suave.
+// Solo thead sin clase (no pisa table-light, bg-*, etc.) y solo en pantalla.
+// ---------------------------------------------------------------------
+@media screen {
+  .table > thead:not([class]) {
+    --bs-table-bg: var(--erp-surface-muted);
+
+    > tr > th {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--erp-text-muted);
+      border-bottom-color: var(--erp-border);
+      vertical-align: middle;
+    }
+  }
+
+  .table-hover {
+    --bs-table-hover-bg: rgba(var(--erp-primary-rgb), 0.05);
+  }
+}
+
+// ---------------------------------------------------------------------
+// Badges "light" (estados): fondo suave + texto oscuro del mismo tono (≥ 4.5:1)
+// ---------------------------------------------------------------------
+.badge {
+  letter-spacing: 0.02em;
+}
+
+.badge-pill {
+  border-radius: var(--erp-radius-pill);
+}
+
+@each $name, $bg, $fg in (primary, '--erp-primary-soft', '--erp-primary-dark'), (secondary, '--erp-neutral-soft', '--erp-neutral-text'),
+  (success, '--erp-success-soft', '--erp-success-text'), (danger, '--erp-danger-soft', '--erp-danger-text'),
+  (warning, '--erp-warning-soft', '--erp-warning-text'), (info, '--erp-info-soft', '--erp-info-text'),
+  (dark, '--erp-neutral-soft', '--erp-text'), (light, '--erp-surface-muted', '--erp-text-muted')
+{
+  .badge-light-#{$name} {
+    background: var(#{$bg});
+    color: var(#{$fg});
+    border-radius: var(--erp-radius-pill);
+    font-weight: 600;
+  }
+}
+
+.badge-light-accent {
+  background: var(--erp-accent-soft);
+  color: var(--erp-accent-text);
+  border-radius: var(--erp-radius-pill);
+  font-weight: 600;
+}
+
+// ---------------------------------------------------------------------
+// Botones: radio, foco visible y variante naranja puntual
+// ---------------------------------------------------------------------
+.btn {
+  --bs-btn-border-radius: var(--erp-radius-sm);
+
+  &:focus-visible {
+    outline: 2px solid rgba(var(--erp-primary-rgb), 0.7);
+    outline-offset: 2px;
+  }
+}
+
+.btn-sm,
+.btn-group-sm > .btn {
+  --bs-btn-border-radius: 5px;
+}
+
+// Naranja para usos puntuales (no reemplaza al botón primario celeste).
+// Fondo = --erp-accent-text: blanco sobre él da 5.19:1.
+.btn-accent {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--erp-accent-text);
+  --bs-btn-border-color: var(--erp-accent-text);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--erp-accent-hover);
+  --bs-btn-hover-border-color: var(--erp-accent-hover);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--erp-accent-hover);
+  --bs-btn-active-border-color: var(--erp-accent-hover);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--erp-accent-text);
+  --bs-btn-disabled-border-color: var(--erp-accent-text);
+  --bs-btn-focus-shadow-rgb: var(--erp-accent-rgb);
+
+  &:focus-visible {
+    outline-color: rgba(var(--erp-accent-rgb), 0.7);
+  }
+}
+
+.btn-outline-accent {
+  --bs-btn-color: var(--erp-accent-text);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--erp-accent);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--erp-accent-text);
+  --bs-btn-hover-border-color: var(--erp-accent-text);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--erp-accent-hover);
+  --bs-btn-active-border-color: var(--erp-accent-hover);
+  --bs-btn-disabled-color: var(--erp-accent-text);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--erp-accent);
+}
+
+// Utilidades de acento
+.text-accent {
+  color: var(--erp-accent-text) !important; // seguro para texto pequeño
+}
+
+.text-accent-bright {
+  color: var(--erp-accent) !important; // solo íconos o texto grande
+}
+
+.bg-accent-soft {
+  background-color: var(--erp-accent-soft) !important;
+}
+
+.bg-primary-soft {
+  background-color: var(--erp-primary-soft) !important;
+}
+
+.text-primary-dark {
+  color: var(--erp-primary-dark) !important;
+}
+
+.link-accent {
+  color: var(--erp-accent-text);
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--erp-accent-hover);
+    text-decoration: underline;
+  }
+}
+
+// ---------------------------------------------------------------------
+// Formularios: foco celeste (global) y estructura opt-in (.erp-form)
+// ---------------------------------------------------------------------
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--erp-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--erp-primary-rgb), 0.18);
+}
+
+.form-check-input:focus {
+  border-color: var(--erp-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--erp-primary-rgb), 0.2);
+}
+
+.ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+  border-color: var(--erp-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--erp-primary-rgb), 0.18);
+}
+
+.erp-form {
+  .form-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--erp-text);
+    text-transform: none;
+  }
+
+  .erp-required {
+    color: var(--erp-danger-text);
+    font-weight: 600;
+  }
+
+  .erp-help {
+    color: var(--erp-primary-dark);
+    opacity: 0.75;
+    cursor: help;
+    font-size: 0.875rem;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .form-text {
+    font-size: 0.75rem;
+    color: var(--erp-text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .input-group-text {
+    background: var(--erp-surface-muted);
+    color: var(--erp-text-muted);
+    font-size: 0.8125rem;
+  }
+
+  .ng-select .ng-select-container {
+    min-height: 41px;
+  }
+
+  .ng-select.is-invalid .ng-select-container {
+    border-color: var(--bs-form-invalid-border-color, #dc3545);
+  }
+
+  input[type='number'].text-end {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.erp-form-section {
+  & + & {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--erp-border);
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--erp-primary-dark);
+
+    > i {
+      color: var(--erp-accent);
+      font-size: 0.95rem;
+    }
+  }
+
+  &__hint {
+    margin: -0.5rem 0 0.875rem;
+    font-size: 0.75rem;
+    color: var(--erp-text-muted);
+  }
+}
+
+// Casilla con descripción (tarjeta seleccionable)
+.erp-check-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--erp-border);
+  border-radius: var(--erp-radius);
+  background: var(--erp-surface);
+  height: 100%;
+
+  .form-check-input {
+    margin: 0.15rem 0 0;
+    flex: 0 0 auto;
+  }
+
+  .form-check-label {
+    font-weight: 500;
+    color: var(--erp-text);
+    font-size: 0.875rem;
+  }
+
+  small {
+    display: block;
+    color: var(--erp-text-muted);
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  &:has(.form-check-input:checked) {
+    border-color: var(--erp-primary-border);
+    background: var(--erp-primary-softer);
+  }
+}
+
+// ---------------------------------------------------------------------
+// Modales: cabecera celeste suave, título celeste oscuro, ícono naranja
+// ---------------------------------------------------------------------
+.modal-content {
+  border: 0;
+  border-radius: var(--erp-radius-lg);
+  box-shadow: var(--erp-shadow-lg);
+}
+
+.modal-header {
+  padding: 0.875rem 1.25rem;
+  background: var(--erp-primary-soft);
+  border-bottom: 1px solid var(--erp-primary-border);
+  border-top-left-radius: var(--erp-radius-lg);
+  border-top-right-radius: var(--erp-radius-lg);
+
+  .modal-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    font-size: var(--erp-title-size);
+    font-weight: var(--erp-title-weight);
+    color: var(--erp-primary-dark);
+    line-height: 1.3;
+
+    > i.feather:first-child,
+    > .erp-modal-icon {
+      color: var(--erp-accent);
+      font-size: 1.125rem;
+    }
+  }
+
+  .btn-close:focus-visible {
+    box-shadow: var(--erp-focus-ring);
+  }
+}
+
+.modal-footer {
+  padding: 0.75rem 1.25rem;
+  background: var(--erp-surface-muted);
+  border-bottom-left-radius: var(--erp-radius-lg);
+  border-bottom-right-radius: var(--erp-radius-lg);
+}
+
+// ---------------------------------------------------------------------
+// Estados vacíos y de carga (opt-in)
+// ---------------------------------------------------------------------
+.erp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.25rem;
+  padding: 2.5rem 1rem;
+  color: var(--erp-text-muted);
+
+  &__icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+    background: var(--erp-primary-soft);
+    color: var(--erp-primary);
+    font-size: 1.5rem;
+
+    .mat-icon,
+    mat-icon {
+      width: 1.75rem;
+      height: 1.75rem;
+      font-size: 1.75rem;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--erp-text);
+  }
+
+  &__text {
+    margin: 0;
+    font-size: 0.8125rem;
+    max-width: 32rem;
+  }
+
+  &--compact {
+    padding: 1.25rem 0.75rem;
+
+    .erp-empty__icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.erp-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 2.5rem 1rem;
+  color: var(--erp-text-muted);
+  font-size: 0.875rem;
+
+  .spinner-border {
+    color: var(--erp-primary);
+  }
+}
+
+// Esqueleto de carga (bloques grises animados)
+.erp-skeleton {
+  display: block;
+  border-radius: var(--erp-radius-sm);
+  background: linear-gradient(90deg, var(--erp-surface-muted) 25%, var(--erp-border) 37%, var(--erp-surface-muted) 63%);
+  background-size: 400% 100%;
+  animation: erp-skeleton 1.4s ease infinite;
+}
+
+@keyframes erp-skeleton {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+// ---------------------------------------------------------------------
+// Alertas (fondos suaves con el texto oscuro del mismo tono)
+// ---------------------------------------------------------------------
+.alert {
+  border-radius: var(--erp-radius);
+}
+
+@each $name, $bg, $fg, $bd in (info, '--erp-primary-soft', '--erp-primary-dark', '--erp-primary-border'),
+  (primary, '--erp-primary-soft', '--erp-primary-dark', '--erp-primary-border'),
+  (success, '--erp-success-soft', '--erp-success-text', '--erp-success-soft'),
+  (warning, '--erp-warning-soft', '--erp-warning-text', '--erp-warning-soft'),
+  (danger, '--erp-danger-soft', '--erp-danger-text', '--erp-danger-soft')
+{
+  .alert-#{$name} {
+    --bs-alert-bg: var(#{$bg});
+    --bs-alert-color: var(#{$fg});
+    --bs-alert-border-color: var(#{$bd});
+    --bs-alert-link-color: var(#{$fg});
+    background-color: var(#{$bg});
+    color: var(#{$fg});
+    border-color: var(#{$bd});
+  }
+}
+
+// Alerta informativa con ícono (opt-in)
+.erp-callout {
+  display: flex;
+  gap: 0.625rem;
+  align-items: flex-start;
+  padding: 0.75rem 1rem;
+  border-radius: var(--erp-radius);
+  background: var(--erp-primary-softer);
+  border: 1px solid var(--erp-primary-border);
+  border-left: 3px solid var(--erp-accent);
+  color: var(--erp-text);
+  font-size: 0.8125rem;
+
+  > i:first-child {
+    color: var(--erp-accent);
+    font-size: 1rem;
+    margin-top: 0.1rem;
+  }
+}
+
+// ---------------------------------------------------------------------
+// Documento (detalle de comprobantes en modal, estilo factura)
+// ---------------------------------------------------------------------
+.erp-doc {
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--erp-border);
+  }
+
+  &__type {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--erp-text-muted);
+  }
+
+  &__number {
+    margin: 0.125rem 0 0.375rem;
+    font-size: 1.5rem; // 24 px: texto grande
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--erp-primary-dark);
+    word-break: break-word;
+  }
+
+  &__total-box {
+    min-width: 11rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--erp-radius);
+    background: var(--erp-primary-soft);
+    text-align: right;
+
+    .erp-doc__label {
+      color: var(--erp-primary-dark);
+    }
+  }
+
+  &__total-amount {
+    font-size: 1.5rem; // ≥ 24 px → el naranja de marca cumple
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--erp-accent);
+    white-space: nowrap;
+  }
+
+  &__label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--erp-text-muted);
+    margin-bottom: 0.125rem;
+  }
+
+  &__value {
+    font-size: 0.875rem;
+    color: var(--erp-text);
+    word-break: break-word;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: 0.875rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  &__section {
+    margin-bottom: 1.25rem;
+  }
+
+  &__section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--erp-primary-dark);
+
+    > i {
+      color: var(--erp-accent);
+    }
+  }
+
+  &__panel {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--erp-border);
+    border-radius: var(--erp-radius);
+    background: var(--erp-surface-muted);
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+  }
+
+  &__lines {
+    border: 1px solid var(--erp-border);
+    border-radius: var(--erp-radius);
+    overflow-x: auto; // recorta las esquinas y permite desplazar la tabla en pantallas angostas
+
+    .table {
+      margin-bottom: 0;
+
+      > :not(caption) > * > * {
+        padding: 0.5rem 0.75rem;
+      }
+
+      > tbody > tr:last-child > * {
+        border-bottom: 0;
+      }
+    }
+  }
+
+  &__totals {
+    margin-left: auto;
+    width: 100%;
+    max-width: 20rem;
+    font-size: 0.875rem;
+
+    > div {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.3rem 0;
+      color: var(--erp-text-muted);
+
+      > span:last-child {
+        color: var(--erp-text);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+    }
+
+    .erp-doc__grand {
+      margin-top: 0.375rem;
+      padding-top: 0.625rem;
+      border-top: 2px solid var(--erp-primary-border);
+      font-weight: 600;
+      color: var(--erp-primary-dark);
+
+      > span:last-child {
+        font-size: 1.25rem;
+        color: var(--erp-primary-dark);
+      }
+    }
+  }
+}
+
+.erp-num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+// Ícono girando mientras se recarga (respeta "reducir movimiento")
+.erp-spin {
+  display: inline-block;
+  animation: erp-spin 0.9s linear infinite;
+}
+
+@keyframes erp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .erp-spin,
+  .erp-skeleton {
+    animation: none;
+  }
+}

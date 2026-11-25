@@ -1,0 +1,175 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+// Local fonts (no internet needed): Kanit for the whole app (its / and ( ) sit level with the letters, e.g. "S/")
+// and Material Icons for <mat-icon>.
+@import '@fontsource/kanit/300.css';
+@import '@fontsource/kanit/400.css';
+@import '@fontsource/kanit/500.css';
+@import '@fontsource/kanit/600.css';
+@import '@fontsource/kanit/700.css';
+@import '@fontsource/material-icons/400.css';
+
+// Material Icons ligatures (<mat-icon>). The font file comes from @fontsource/material-icons (angular.json → styles);
+// this is the class Google's stylesheet used to provide.
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette
+      ),
+      typography: Kanit,
+      density: 0
+    )
+  );
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+  height: 100%;
+}
+/* You can add global styles to this file, and also import other style files */
+
+/**======================================================================
+=========================================================================
+Template Name: Gradient Able Admin Template
+Author: Codedscss/themes
+supports: https://codedscss/themes.com/submit-ticket/
+File: style.css
+=========================================================================
+=========================================================================
+  == Table of Contents==
+	- Generic classes
+		-	Margin, Padding, Font class, text align, position, floating, overflow, background class, text color, display class, boarder class
+	- Theme Elements
+		-	Accordion, Button, tabs, typography, buttons, box shadow, Lable & Badges, Alert, Pagination, Breadcumb, Cards, Collapse,
+        -   Carousel, Grid, Progress, Model, tooltip, popover, Datepicker, Gridstack, lightbox, notification, Nestable, pnotify, rating,
+        -   Rangeslider, Slider, Syntax Highlighter, Tour, Treeview, Toolbar, Session Timeout, Session idle Timeout, offline, Animation
+    - Forms
+        -   Forms Elements, Advance Form Control, Validation, Masking, Wizard, Picker, Select
+	- Pages
+		-   authentication, Maintenance, Maps, Landing page messages, task, Todo, Notes, Charts, Icons, Gallery, Editors,
+        -   Invoice, Full Calender, File Upload,
+=================================================================================
+=================================================================================== */
+
+// Theme Font
+@import 'scss/themes/font/theme-font';
+
+// main framework
+@import '../node_modules/bootstrap/scss/functions';
+@import '../node_modules/bootstrap/scss/variables';
+@import 'scss/settings/custom-variables';
+@import 'scss/settings/theme-variables';
+
+// bootstrap
+@import '../node_modules/bootstrap/scss/mixins';
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
+@import '../node_modules/bootstrap/scss/utilities';
+@import '../node_modules/bootstrap/scss/utilities/api';
+@import 'scss/themes/general';
+@import 'scss/themes/generic';
+@import 'scss/themes/minixs/function';
+
+body.gradient-ltr {
+  @import '../node_modules/bootstrap/scss/utilities';
+  @import '../node_modules/bootstrap/scss/utilities/api';
+}
+
+// ng module
+@import 'scss/ng-module/ng-module';
+
+// icon
+@import 'scss/themes/font/gradient-icon';
+@import 'scss/themes/font/feather.css';
+@import 'scss/themes/font/fontawesome.css';
+@import 'scss/themes/font/tabler-icons.min.css';
+@import 'scss/themes/font/material.css';
+@import 'scss/themes/font/phosphor/duotone/style.css';
+@import 'scss/themes/font/flaticon';
+
+// component
+@import 'scss/themes/component/component';
+
+@import 'scss/themes/plugin/animate';
+
+// theme layouts
+@import 'scss/themes/layouts/pc-footer.scss';
+@import 'scss/themes/layouts/menu-lite';
+@import 'scss/themes/layouts/menu-ng';
+
+// Dashboard Widgets
+@import 'scss/themes/dashboard/widget';
+
+// custom plugin
+@import 'scss/themes/plugin/plugin';
+
+// pages
+
+@import 'scss/themes/pages/page';
+@import 'scss/themes/chat/chat';
+
+// custom
+@import 'scss/themes/custom';
+@import 'scss/layout-rtl';
+
+// calender css
+@import '../node_modules/angular-calendar/css/angular-calendar.css';
+
+// ngx carousel
+@import 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@import 'ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
+
+body.gradient-rtl {
+  @import 'scss/layout-rtl-utility.scss';
+  @import '../node_modules/bootstrap/scss/utilities/api';
+}
+
+@import 'scss/layout-dark';
+
+// Sidebar group titles: the template's 1px tracking was made for Poppins; with Kanit (narrower) it looks stretched.
+.pcoded-navbar .pcoded-inner-navbar li.pcoded-menu-caption {
+  letter-spacing: 0.2px;
+  font-weight: 600;
+}
+
+// ERP design system (tokens --erp-* + componentes). Va al final para ganar a la plantilla
+// con la misma especificidad. Ver src/scss/erp/_tokens.scss (contrastes) y _components.scss.
+@import 'scss/erp/tokens';
+@import 'scss/erp/components';

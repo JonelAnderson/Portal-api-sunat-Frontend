@@ -1,0 +1,129 @@
+// =====================================================================
+//  ERP - design tokens (CSS custom properties, prefijo --erp-)
+// ---------------------------------------------------------------------
+//  Base: celeste de la plantilla ($primary-color #4099ff) + acento naranja
+//  #fa5b0f. Contrastes WCAG 2.1 calculados (texto / fondo):
+//
+//   Token                    Color     sobre #fff   sobre primary-soft #eaf4ff
+//   --erp-primary            #4099ff   2.91 (solo fondos, íconos, bordes)
+//   --erp-primary-dark       #265c99   6.83         6.14   ← títulos y texto celeste
+//   --erp-accent             #fa5b0f   3.20         2.87   ← íconos, barras, texto ≥ 24 px
+//                                                          (o ≥ 18.7 px negrita)
+//   --erp-accent-text        #be450b   5.19         4.67   ← texto pequeño naranja
+//                                      (4.64 sobre accent-soft #ffefe7)
+//   blanco sobre --erp-accent        3.20  → solo texto grande
+//   blanco sobre --erp-accent-text   5.19  → .btn-accent
+//   --erp-text               #1d2630  15.30        13.76
+//   --erp-text-muted         #5b6b79   5.49         4.94  (5.19 sobre #f4f9ff)
+//   --erp-text-subtle        #8996a4   3.02  ← solo placeholders / decorativo
+//
+//  Badges suaves (texto sobre su fondo):
+//   success #176c5b / #e0f9f4 5.71 · warning #735223 / #fff2df 6.42
+//   danger  #993243 / #ffeaee 6.31 · info    #005e6a / #e0f7fa 6.71
+//   primary #265c99 / #eaf4ff 6.14 · secondary #3e4853 / #eceff1 8.06
+//
+//  Nota: blanco sobre #4099ff (botón primario) es 2.91:1. Se mantiene por
+//  decisión de marca; --erp-primary-strong (#2f71bd, 4.98:1) queda listo
+//  por si se decide oscurecer el botón primario más adelante.
+// =====================================================================
+
+:root {
+  // Celeste (primario)
+  --erp-primary: #4099ff;
+  --erp-primary-rgb: 64, 153, 255;
+  --erp-primary-strong: #2f71bd;
+  --erp-primary-dark: #265c99;
+  --erp-primary-soft: #eaf4ff; // mix(#4099ff, #fff, 11%)
+  --erp-primary-softer: #f4f9ff; // mix(#4099ff, #fff, 6%)
+  --erp-primary-border: #cfe5ff;
+
+  // Naranja (acento puntual)
+  --erp-accent: #fa5b0f;
+  --erp-accent-rgb: 250, 91, 15;
+  --erp-accent-text: #be450b; // mismo tono, 24 % más oscuro
+  --erp-accent-hover: #a83d0a;
+  --erp-accent-soft: #ffefe7;
+
+  // Neutros
+  --erp-text: #1d2630;
+  --erp-text-muted: #5b6b79;
+  --erp-text-subtle: #8996a4;
+  --erp-border: #e2e5e8;
+  --erp-border-strong: #dbe0e5;
+  --erp-bg: #f6f7fb;
+  --erp-surface: #ffffff;
+  --erp-surface-muted: #f8fafc;
+
+  // Estados (suaves, para badges y alertas)
+  --erp-success: #2ed8b6;
+  --erp-success-soft: #e0f9f4;
+  --erp-success-text: #176c5b;
+  --erp-warning: #ffb64d;
+  --erp-warning-soft: #fff2df;
+  --erp-warning-text: #735223;
+  --erp-danger: #ff5370;
+  --erp-danger-soft: #ffeaee;
+  --erp-danger-text: #993243;
+  --erp-info: #00bcd4;
+  --erp-info-soft: #e0f7fa;
+  --erp-info-text: #005e6a;
+  --erp-neutral-soft: #eceff1;
+  --erp-neutral-text: #3e4853;
+
+  // Radios
+  --erp-radius-sm: 6px;
+  --erp-radius: 8px;
+  --erp-radius-lg: 12px;
+  --erp-radius-pill: 999px;
+
+  // Sombras
+  --erp-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.07);
+  --erp-shadow-md: 0 4px 14px rgba(16, 24, 40, 0.08);
+  --erp-shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.14);
+  --erp-focus-ring: 0 0 0 0.2rem rgba(64, 153, 255, 0.3);
+
+  // Cabecera de página / modal
+  --erp-header-pad-y: 0.875rem;
+  --erp-header-pad-x: 1.25rem;
+  --erp-header-gap: 0.75rem;
+  --erp-control-height: 2.5rem; // 40 px: buscador, filtros y botones de la cabecera
+
+  // Tipografía de títulos (Kanit)
+  --erp-title-size: 1.0625rem; // 17 px
+  --erp-title-weight: 600;
+  --erp-title-tracking: 0.01em;
+  --erp-subtitle-size: 0.8125rem; // 13 px
+  --erp-section-title-size: 0.8125rem;
+  --erp-kpi-size: 1.5rem; // 24 px → el naranja puro cumple como texto grande
+}
+
+// Modo oscuro de la plantilla (body.gradient-dark). Fondos: tarjeta #39434d,
+// cabecera suave #3a5169. Contrastes: primary-dark #a8d2ff 5.20 / 6.40,
+// accent-text #ffb38a 4.71 / 5.79, text-muted #b6c0c8 4.44* / 5.45 (*subtítulo de
+// la cabecera en oscuro: queda apenas bajo 4.5; usar text o primary-dark si importa).
+body.gradient-dark {
+  --erp-primary-dark: #a8d2ff;
+  --erp-primary-soft: #3a5169;
+  --erp-primary-softer: #34404c;
+  --erp-primary-border: #47627e;
+  --erp-accent-text: #ffb38a;
+  --erp-accent-soft: #4a3a34;
+  --erp-text: #dfe5eb;
+  --erp-text-muted: #b6c0c8;
+  --erp-border: #48535e;
+  --erp-border-strong: #525e6a;
+  --erp-surface: #39434d;
+  --erp-surface-muted: #333c45;
+  --erp-success-soft: rgba(46, 216, 182, 0.16);
+  --erp-success-text: #7eead3;
+  --erp-warning-soft: rgba(255, 182, 77, 0.16);
+  --erp-warning-text: #ffd08f;
+  --erp-danger-soft: rgba(255, 83, 112, 0.16);
+  --erp-danger-text: #ff9eae;
+  --erp-info-soft: rgba(0, 188, 212, 0.16);
+  --erp-info-text: #7fe3f0;
+  --erp-neutral-soft: rgba(255, 255, 255, 0.08);
+  --erp-neutral-text: #dfe5eb;
+  --erp-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --erp-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,12 @@
+# Contexto de build de la imagen: solo el código del frontend.
+node_modules
+dist
+.angular
+.git
+.github
+.vscode
+.idea
+*.log
+deploy/README.md
+README.md
+CLAUDE.md

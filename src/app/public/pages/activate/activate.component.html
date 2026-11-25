@@ -1,0 +1,84 @@
+<div class="erp-auth">
+  <aside class="erp-auth__brand" aria-hidden="true">
+    <span class="erp-auth__orb erp-auth__orb--1"></span>
+    <span class="erp-auth__orb erp-auth__orb--2"></span>
+    <div class="erp-auth__brand-inner">
+      <span class="erp-auth__mark"><em class="feather icon-server"></em></span>
+      <p class="erp-auth__headline">Portal API SUNAT</p>
+      <span class="erp-auth__bar"></span>
+      <p class="erp-auth__lead">Cree su contraseña para entrar al portal de su empresa.</p>
+      <ul class="erp-auth__features">
+        <li><span><em class="feather icon-check"></em></span>Un solo uso: el enlace del correo vence a las 72 horas</li>
+        <li><span><em class="feather icon-check"></em></span>Después del primer ingreso configurará la verificación en dos pasos</li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="erp-auth__panel">
+    <div class="erp-auth__card">
+      @if (linkError(); as msg) {
+      <div class="erp-auth__step-icon" aria-hidden="true"><em class="feather icon-alert-circle"></em></div>
+      <h1 class="erp-auth__title">No se pudo activar la cuenta</h1>
+      <p class="erp-auth__subtitle" role="alert">{{ msg }}</p>
+      <a routerLink="/sign-in" class="btn btn-outline-secondary w-100">
+        <em class="feather icon-arrow-left me-1" aria-hidden="true"></em>Ir a iniciar sesión
+      </a>
+      } @else {
+      <form (ngSubmit)="submit()" [formGroup]="form" novalidate autocomplete="off">
+        <p class="erp-auth__eyebrow">Bienvenido</p>
+        <h1 class="erp-auth__title">Active su cuenta</h1>
+        <p class="erp-auth__subtitle">Elija la contraseña con la que entrará al portal.</p>
+
+        <div class="erp-auth__group">
+          <label class="erp-auth__label" for="actPassword">Contraseña</label>
+          <div class="erp-auth__control" [class.erp-auth__control--invalid]="invalid('password')">
+            <em class="feather icon-lock erp-auth__icon" aria-hidden="true"></em>
+            <input id="actPassword" [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Nueva contraseña"
+              autocomplete="new-password" [attr.maxlength]="maxLength" [attr.aria-invalid]="invalid('password')"
+              aria-describedby="actPasswordError" />
+            <button type="button" class="erp-auth__eye" (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'" [attr.aria-pressed]="showPassword">
+              <em class="feather" [ngClass]="showPassword ? 'icon-eye-off' : 'icon-eye'" aria-hidden="true"></em>
+            </button>
+          </div>
+          @if (invalid('password')) {
+          <div id="actPasswordError" class="erp-auth__error" role="alert">
+            <em class="feather icon-alert-circle" aria-hidden="true"></em>{{ policyMessage }}
+          </div>
+          }
+        </div>
+
+        <div class="erp-auth__group">
+          <label class="erp-auth__label" for="actConfirm">Repita la contraseña</label>
+          <div class="erp-auth__control" [class.erp-auth__control--invalid]="invalid('confirmPassword')">
+            <em class="feather icon-lock erp-auth__icon" aria-hidden="true"></em>
+            <input id="actConfirm" [type]="showPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Repita la contraseña"
+              autocomplete="new-password" [attr.maxlength]="maxLength" [attr.aria-invalid]="invalid('confirmPassword')"
+              aria-describedby="actConfirmError" />
+          </div>
+          @if (invalid('confirmPassword')) {
+          <div id="actConfirmError" class="erp-auth__error" role="alert">
+            <em class="feather icon-alert-circle" aria-hidden="true"></em>Las contraseñas no coinciden.
+          </div>
+          }
+        </div>
+
+        <app-password-requirements [value]="form.get('password')?.value"></app-password-requirements>
+
+        @if (passwordError(); as pe) {
+        <div class="erp-auth__error mb-3" role="alert"><em class="feather icon-alert-circle" aria-hidden="true"></em>{{ pe }}</div>
+        }
+
+        <button type="submit" class="btn btn-primary w-100 erp-auth__submit" [disabled]="isLoading()">
+          @if (isLoading()) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Guardando…
+          } @else {
+          Activar cuenta <em class="feather icon-arrow-right ms-2" aria-hidden="true"></em>
+          }
+        </button>
+      </form>
+      }
+    </div>
+  </main>
+</div>

@@ -1,0 +1,52 @@
+<div class="alert-overlay" (click)="onOverlayClick($event)">
+  <div class="alert-container" [ngClass]="'alert-' + type">
+    <div class="alert-content">
+      <!-- Close button -->
+      <!-- <button *ngIf="showClose" class="close-button" (click)="onCancel()">
+        <mat-icon fontIcon="close" class="icon-close"></mat-icon>
+      </button> -->
+      
+      <!-- Icon -->
+      <div class="alert-icon">
+        <mat-icon
+          *ngIf="type === 'success'" 
+          fontIcon="check_circle_outline"
+          class="icon success">
+        </mat-icon>
+        <mat-icon
+          *ngIf="type === 'info'" 
+          fontIcon="info"
+          class="icon info">
+        </mat-icon>
+        <mat-icon
+          *ngIf="type === 'warning'" 
+          fontIcon="warning"
+          class="icon warning">
+        </mat-icon>
+        <mat-icon
+          *ngIf="type === 'danger'" 
+          fontIcon="error_outline"
+          class="icon danger">
+        </mat-icon>
+      </div>
+
+      <!-- Content -->
+      <h2 class="alert-heading">{{title}}</h2>
+      <p class="alert-message">{{message}}</p>
+
+      <!-- Buttons -->
+      <div class="alert-actions" [ngClass]="{'single-button': !showCancel}">
+        <button *ngIf="showCancel" 
+                class="btn-cancel" 
+                (click)="onCancel()">
+          {{cancelText}}
+        </button>
+        <button class="btn-confirm" 
+                [ngClass]="type" 
+                (click)="onConfirm()">
+          {{confirmText}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

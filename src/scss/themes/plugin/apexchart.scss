@@ -1,0 +1,31 @@
+#courses {
+  apx-chart {
+    div {
+      min-height: 0px !important;
+    }
+  }
+}
+
+#chart {
+  max-height: 200px !important;
+}
+
+.apexcharts-legend-series {
+  display: flex !important;
+  align-items: center;
+  .apexcharts-legend-marker {
+    margin-right: 5px;
+    top: 0 !important;
+    width: 12px !important;
+    height: 12px !important;
+
+    svg {
+      border-radius: 50%;
+    }
+
+    .gradient-rtl & {
+      margin-left: 10px;
+      margin-right: 0px;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+<app-navigation
+  class="pcoded-navbar menu-light menupos-fixed"
+  [ngClass]="{
+    'navbar-collapsed': navCollapsed,
+    'theme-horizontal': this.gradientConfig['layout'] === 'horizontal',
+    'theme-compact': this.gradientConfig['layout'] === 'compact',
+    'mob-open': navCollapsedMob
+  }"
+  (NavMobCollapse)="closeMenu()"
+  (NavCollapsedMob)="navMobClick()"
+/>
+
+<app-nav-bar class="navbar pcoded-header navbar-expand-lg navbar-light header-blue headerPos-fixed"
+  (NavCollapse)="this.navCollapsed = !this.navCollapsed" (NavCollapsedMob)="navMobClick()" />
+
+<div class="pcoded-main-container">
+  <div class="pcoded-wrapper"
+    [ngClass]="{ container: this.gradientConfig.layout === 'horizontal' && this.gradientConfig.subLayout === 'horizontal-2' }">
+    <div class="pcoded-content">
+      <div class="pcoded-inner-content">
+        <div class="main-body">
+          <div class="page-wrapper">
+            <app-breadcrumb />
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pc-menu-overlay" (click)="closeMenu()" (keydown)="handleKeyDown($event)" tabindex="0"></div>
+
+</div>
+
+<app-footer
+  [ngClass]="{
+    'navbar-collapsed': navCollapsed
+  }"
+/>

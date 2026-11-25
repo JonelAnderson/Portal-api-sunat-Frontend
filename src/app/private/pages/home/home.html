@@ -1,0 +1,122 @@
+<div class="row btn-page">
+  <div class="col-12">
+    <div class="card">
+      <app-page-header icon="icon-home" title="INICIO" subtitle="Resumen de su empresa en la API de facturación electrónica"></app-page-header>
+      <div class="card-body">
+        @if (!context.tenant()) {
+        <app-portal-empty icon="icon-briefcase" title="Su cuenta aún no tiene empresas vinculadas"
+          text="Pida a su proveedor que vincule su acceso a una empresa emisora."></app-portal-empty>
+        } @else if (loading()) {
+        <div class="erp-loading" role="status"><span class="spinner-border spinner-border-sm" aria-hidden="true"></span>Cargando…</div>
+        } @else if (notFound()) {
+        <app-portal-empty icon="icon-search" title="No encontramos esta empresa"
+          text="Puede que ya no tenga acceso a ella. Elija otra empresa en la barra superior o consulte con su proveedor."></app-portal-empty>
+        } @else if (error()) {
+        <app-portal-empty icon="icon-alert-triangle" title="No se pudo cargar el resumen" [text]="error()">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="load()"><em class="feather icon-refresh-cw me-1"></em>Reintentar</button>
+        </app-portal-empty>
+        } @else if (summary(); as s) {
+
+        @if (!s.active) {
+        <div class="alert alert-danger d-flex gap-2 align-items-start" role="alert">
+          <em class="feather icon-alert-octagon mt-1" aria-hidden="true"></em>
+          <div><strong>La empresa está desactivada.</strong> No puede emitir comprobantes. Consulte con su proveedor.</div>
+        </div>
+        }
+        @if (s.billingSuspended) {
+        <div class="alert alert-danger d-flex gap-2 align-items-start" role="alert">
+          <em class="feather icon-alert-octagon mt-1" aria-hidden="true"></em>
+          <div><strong>La emisión está suspendida por falta de pago.</strong> Mientras siga así no se aceptan comprobantes nuevos. Regularice su
+            pago o consulte con su proveedor.</div>
+        </div>
+        }
+        @switch (s.certificate?.status) {
+        @case ('VENCIDO') {
+        <div class="alert alert-danger d-flex gap-2 align-items-start" role="alert">
+          <em class="feather icon-x-circle mt-1" aria-hidden="true"></em>
+          <div><strong>Su certificado digital venció</strong>@if (certificateExpires()) { el {{ certificateExpires() }} }. SUNAT no aceptará comprobantes
+            hasta que se cargue uno vigente. Pida a su proveedor que lo actualice.</div>
+        </div>
+        }
+        @case ('ROTO') {
+        <div class="alert alert-danger d-flex gap-2 align-items-start" role="alert">
+          <em class="feather icon-x-circle mt-1" aria-hidden="true"></em>
+          <div><strong>No se puede leer su certificado digital.</strong> Pida a su proveedor que lo vuelva a cargar.</div>
+        </div>
+        }
+        @case ('POR_VENCER') {
+        <div class="alert alert-warning d-flex gap-2 align-items-start" role="alert">
+          <em class="feather icon-alert-triangle mt-1" aria-hidden="true"></em>
+          <div><strong>Su certificado digital está por vencer</strong>@if (certificateExpires()) { (vence el {{ certificateExpires() }}) }. Renuévelo a tiempo y
+            pida a su proveedor que lo cargue.</div>
+        </div>
+        }
+        }
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6 col-xl-4">
+            <div class="border rounded p-3 h-100">
+              <div class="small text-muted mb-1"><em class="feather icon-briefcase me-1" aria-hidden="true"></em>Empresa</div>
+              <div class="fw-semibold">{{ s.businessName }}</div>
+              @if (s.tradeName && s.tradeName !== s.businessName) {<div class="small text-muted">{{ s.tradeName }}</div>}
+              <div class="small mt-1">RUC <span class="erp-num">{{ s.ruc }}</span></div>
+              @if (environment()) {<span class="badge mt-2" [ngClass]="s.environment === 'production' ? 'badge-light-success' : 'badge-light-info'">{{ environment() }}</span>}
+              <span class="badge mt-2 ms-1" [ngClass]="s.active ? 'badge-light-success' : 'badge-light-danger'">{{ s.active ? 'Activa' : 'Desactivada' }}</span>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4">
+            <div class="border rounded p-3 h-100">
+              <div class="small text-muted mb-1"><em class="feather icon-package me-1" aria-hidden="true"></em>Plan</div>
+              <div class="fw-semibold">{{ s.planName || s.plan || 'Sin plan' }}</div>
+              <div class="small text-muted mt-2">Comprobantes de este mes</div>
+              <div class="fs-5 fw-semibold erp-num">{{ quota() }}</div>
+              @if (percent() !== null) {
+              <div class="progress mt-1" style="height: 8px" role="progressbar" [attr.aria-valuenow]="percent()" aria-valuemin="0" aria-valuemax="100"
+                [attr.aria-label]="'Cupo del mes usado: ' + percent() + ' por ciento'">
+                <div class="progress-bar" [ngClass]="'bg-' + tone()" [style.width.%]="percent()"></div>
+              </div>
+              <div class="small mt-1" [ngClass]="tone() === 'danger' ? 'text-danger' : tone() === 'warning' ? 'text-warning-emphasis' : 'text-muted'">
+                @if (tone() === 'danger') {Alcanzó el cupo de su plan.} @else if (tone() === 'warning') {Está cerca del cupo de su plan ({{ percent() }} %).} @else {<span>{{ percent() }} % del cupo usado.</span>}
+              </div>
+              } @else if (unlimited()) {
+              <div class="small text-muted mt-1">Su plan no tiene tope mensual.</div>
+              }
+            </div>
+          </div>
+
+          <div class="col-md-12 col-xl-4">
+            <div class="border rounded p-3 h-100">
+              <div class="small text-muted mb-1"><em class="feather icon-award me-1" aria-hidden="true"></em>Certificado digital</div>
+              <span class="badge" [ngClass]="certificate().badge"><em class="feather {{ certificate().icon }} me-1" aria-hidden="true"></em>{{ certificate().text }}</span>
+              @if (s.certificate?.expiresOn) {
+              <div class="small mt-2">Vence el <span class="erp-num">{{ certificateExpires() }}</span></div>
+              <div class="small text-muted">{{ certificateWhen() }}</div>
+              } @else {
+              <div class="small text-muted mt-2">Su proveedor carga el certificado con el que se firman los comprobantes.</div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <h6 class="erp-section-title">Accesos directos</h6>
+        <div class="row g-3">
+          @for (c of shortcuts; track c.url) {
+          <div class="col-md-6 col-xl-4">
+            <a [routerLink]="c.url" class="card home-card h-100 text-reset text-decoration-none mb-0">
+              <div class="card-body d-flex gap-3 align-items-start">
+                <em class="feather {{ c.icon }} home-card__icon text-primary" aria-hidden="true"></em>
+                <div>
+                  <div class="fw-semibold">{{ c.label }}</div>
+                  <div class="small text-muted">{{ c.description }}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

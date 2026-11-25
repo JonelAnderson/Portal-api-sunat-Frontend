@@ -1,0 +1,19 @@
+# Portal de clientes API SUNAT (frontend) — Coolify (build pack "Docker Compose"). Runbook: deploy/README.md.
+#   Coolify: Base Directory "/"  ·  Docker Compose Location "/docker-compose.coolify.yml"
+# Un solo servicio, "web" (nginx, puerto 80). Sin "ports:": Coolify lo publica por su proxy (Traefik) con el dominio que se le asigne
+# al servicio "web" (con el puerto: https://dominio:80). Llega a la API por la red compartida de su backend (SUNAT_SHARED_NETWORK),
+# que el backend crea con el alias de la API: el backend se despliega primero.
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      default:
+      shared:
+
+networks:
+  shared:
+    name: ${SUNAT_SHARED_NETWORK:-sunat-prod}
+    external: true

@@ -1,0 +1,52 @@
+// Gráfico de 6 meses: barras con CSS, sin librerías de gráficos.
+.usage-chart {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  height: 200px;
+  max-width: 640px;
+  padding: 0.25rem 0.25rem 0;
+}
+
+.usage-chart__col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.usage-chart__value {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--bs-body-color, #212529);
+  font-variant-numeric: tabular-nums;
+}
+
+.usage-chart__bar-wrap {
+  flex: 1 1 auto;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 1px solid var(--bs-border-color, #e5e7eb);
+}
+
+.usage-chart__bar {
+  width: min(48px, 80%);
+  border-radius: 4px 4px 0 0;
+  background: var(--bs-info, #3ebfea);
+  opacity: 0.7;
+
+  &--current {
+    background: var(--bs-primary, #04a9f5);
+    opacity: 1;
+  }
+}
+
+.usage-chart__label {
+  padding-top: 0.25rem;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  color: var(--bs-secondary-color, #6c757d);
+}

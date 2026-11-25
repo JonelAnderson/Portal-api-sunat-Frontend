@@ -1,0 +1,151 @@
+<div class="erp-auth">
+  <!-- Panel de marca (solo pantallas anchas) -->
+  <aside class="erp-auth__brand" aria-hidden="true">
+    <span class="erp-auth__orb erp-auth__orb--1"></span>
+    <span class="erp-auth__orb erp-auth__orb--2"></span>
+    <div class="erp-auth__brand-inner">
+      <span class="erp-auth__mark"><em class="feather icon-server"></em></span>
+      <p class="erp-auth__headline">Portal API SUNAT</p>
+      <span class="erp-auth__bar"></span>
+      <p class="erp-auth__lead">Consulte los comprobantes de su empresa, su uso del mes y las credenciales de la API de facturación electrónica.</p>
+      <ul class="erp-auth__features">
+        <li><span><em class="feather icon-check"></em></span>Facturas, boletas, notas y guías con su PDF, XML y CDR</li>
+        <li><span><em class="feather icon-check"></em></span>Plan, cupo del mes y vencimiento del certificado</li>
+        <li><span><em class="feather icon-check"></em></span>Credenciales de la API (se regeneran aquí)</li>
+        <li><span><em class="feather icon-check"></em></span>Acceso protegido con verificación en dos pasos</li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Formulario -->
+  <main class="erp-auth__panel">
+    <div class="erp-auth__card" [class.erp-auth__card--wide]="stage() === 'setup'">
+      <!-- <img src="assets/images/logo-dark.png" alt="logo" class="erp-auth__logo" /> -->
+
+      @switch (stage()) {
+      @case ('credentials') {
+      <form (ngSubmit)="login()" [formGroup]="authForm" novalidate autocomplete="off">
+        <p class="erp-auth__eyebrow">Bienvenido</p>
+        <h1 class="erp-auth__title">Iniciar sesión</h1>
+        <p class="erp-auth__subtitle">Ingrese el correo con el que lo invitaron y su contraseña.</p>
+
+        @if (sessionNotice()) {
+        <div class="erp-auth__notice" role="status">
+          <em class="feather icon-info" aria-hidden="true"></em><span>{{ sessionNotice() }}</span>
+        </div>
+        }
+
+        <div class="erp-auth__group">
+          <label class="erp-auth__label" for="loginUser">Correo</label>
+          <div class="erp-auth__control" [class.erp-auth__control--invalid]="isFieldInvalid('userName')">
+            <em class="feather icon-mail erp-auth__icon" aria-hidden="true"></em>
+            <!-- Sin historial de formularios: nombre distinto en cada carga (el navegador guarda y sugiere por nombre),
+                 autocomplete="off" y solo lectura hasta enfocar (así no despliega la lista al hacer clic). -->
+            <input id="loginUser" type="email" formControlName="userName" placeholder="usuario@dominio.com" autocomplete="off"
+              [attr.name]="userFieldName" [readOnly]="userReadonly()" (focus)="userReadonly.set(false)"
+              autocapitalize="none" spellcheck="false" (blur)="onBlur()"
+              [attr.aria-invalid]="isFieldInvalid('userName')" aria-describedby="loginUserError" />
+          </div>
+          @if (isFieldInvalid('userName')) {
+          <div id="loginUserError" class="erp-auth__error" role="alert">
+            <em class="feather icon-alert-circle" aria-hidden="true"></em>{{ getErrorMessage('userName') }}
+          </div>
+          }
+        </div>
+
+        <div class="erp-auth__group erp-auth__group--last">
+          <label class="erp-auth__label" for="password">Contraseña</label>
+          <div class="erp-auth__control" [class.erp-auth__control--invalid]="isFieldInvalid('password')">
+            <em class="feather icon-lock erp-auth__icon" aria-hidden="true"></em>
+            <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Su contraseña"
+              autocomplete="current-password" (blur)="onBlur()" (keydown.space)="$event.preventDefault()"
+              (keyup)="onPasswordKey($event)" (keydown)="onPasswordKey($event)"
+              [attr.aria-invalid]="isFieldInvalid('password')" aria-describedby="loginPasswordError loginCapsLock" />
+            <button type="button" class="erp-auth__eye" (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'" [attr.aria-pressed]="showPassword">
+              <em class="feather" [ngClass]="showPassword ? 'icon-eye-off' : 'icon-eye'" aria-hidden="true"></em>
+            </button>
+          </div>
+          @if (isFieldInvalid('password')) {
+          <div id="loginPasswordError" class="erp-auth__error" role="alert">
+            <em class="feather icon-alert-circle" aria-hidden="true"></em>{{ getErrorMessage('password') }}
+          </div>
+          }
+          @if (capsLock()) {
+          <div id="loginCapsLock" class="erp-auth__hint">
+            <em class="feather icon-alert-triangle" aria-hidden="true"></em>Bloq Mayús está activado.
+          </div>
+          }
+          <!-- Sin "olvidé mi contraseña": su proveedor le envía una invitación nueva para fijar otra. -->
+          <p class="small text-muted mt-3 mb-0">¿No recuerda su contraseña? Pida a su proveedor una invitación nueva.</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 erp-auth__submit" [disabled]="isLoading()">
+          @if (isLoading()) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Ingresando…
+          } @else {
+          Ingresar <em class="feather icon-arrow-right ms-2" aria-hidden="true"></em>
+          }
+        </button>
+
+        <div class="erp-auth__secure">
+          <span class="erp-auth__secure-icon" aria-hidden="true"><em class="feather icon-shield"></em></span>
+          <span>Su cuenta está protegida con verificación en dos pasos: después de la contraseña se usa su app autenticadora.</span>
+        </div>
+      </form>
+      }
+
+      @case ('verify') {
+      <form (ngSubmit)="verifyMfa()" autocomplete="off">
+        <div class="erp-auth__step-icon" aria-hidden="true"><em class="feather icon-shield"></em></div>
+        <h1 class="erp-auth__title">Verificación en dos pasos</h1>
+        @if (!useRecoveryCode()) {
+        <p class="erp-auth__subtitle">Escriba el código de 6 dígitos que muestra su app autenticadora.</p>
+        <div class="mb-3">
+          <input type="text" class="form-control erp-auth__otp" inputmode="numeric" autocomplete="one-time-code"
+            maxlength="6" placeholder="000000" [value]="mfaCode()" [disabled]="isLoading()" (input)="onMfaCodeInput($event)"
+            aria-label="Código de 6 dígitos" autofocus />
+        </div>
+        } @else {
+        <p class="erp-auth__subtitle">Escriba uno de sus códigos de recuperación (formato xxxxx-xxxxx). Cada
+          código sirve una sola vez.</p>
+        <div class="mb-3">
+          <input type="text" class="form-control erp-auth__recovery" data-keep-case maxlength="11" placeholder="xxxxx-xxxxx"
+            autocomplete="off" spellcheck="false" [value]="recoveryCode()" [disabled]="isLoading()"
+            (input)="onRecoveryCodeInput($event)" aria-label="Código de recuperación" />
+        </div>
+        }
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary erp-auth__submit"
+            [disabled]="isLoading() || (useRecoveryCode() ? !recoveryCodeValid : mfaCode().length !== 6)">
+            @if (isLoading()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            Verificando...
+            } @else {
+            Verificar
+            }
+          </button>
+          <button type="button" class="btn btn-link btn-sm erp-auth__link" [disabled]="isLoading()" (click)="toggleRecoveryCode()">
+            <em class="feather me-1" [ngClass]="useRecoveryCode() ? 'icon-smartphone' : 'icon-key'" aria-hidden="true"></em>
+            {{ useRecoveryCode() ? 'Usar el código de la app' : 'Usar un código de recuperación' }}
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="isLoading()"
+            (click)="backToCredentials()">
+            <em class="feather icon-arrow-left me-1" aria-hidden="true"></em>Volver
+          </button>
+        </div>
+      </form>
+      }
+
+      @case ('setup') {
+      <app-mfa-setup [userName]="userNameValue" (completed)="onSetupCompleted()"
+        (cancelled)="backToCredentials($event)"></app-mfa-setup>
+      }
+      }
+    </div>
+    @if (stage() !== 'credentials') {
+    <p class="erp-auth__foot"><em class="feather icon-lock me-1" aria-hidden="true"></em>Conexión protegida · Verificación en dos pasos obligatoria</p>
+    }
+  </main>
+</div>

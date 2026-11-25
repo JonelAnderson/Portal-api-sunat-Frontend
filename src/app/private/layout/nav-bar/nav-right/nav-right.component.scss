@@ -1,0 +1,13 @@
+.ambiente-qa {
+    color: #ff4081;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 480px) {
+ 
+  
+    .ambiente-qa{
+        display: none !important;
+    }
+  }

@@ -1,0 +1,21 @@
+<ul class="navbar-nav me-auto align-items-center">
+  @if (context.tenant(); as current) {
+  <li class="nav-item d-flex align-items-center gap-2 py-1">
+    <em class="feather icon-briefcase text-muted" aria-hidden="true"></em>
+    @if (context.tenants().length > 1) {
+    <label class="visually-hidden" for="portal-tenant">Empresa</label>
+    <select id="portal-tenant" class="form-select form-select-sm portal-tenant" [value]="current.id" (change)="onSelect($event)">
+      @for (t of context.tenants(); track t.id) {
+      <option [value]="t.id" [selected]="t.id === current.id">{{ label(t) }}</option>
+      }
+    </select>
+    } @else {
+    <span class="fw-semibold text-muted text-truncate">{{ label(current) }}</span>
+    }
+  </li>
+  } @else {
+  <li class="nav-item d-none d-md-block">
+    <span class="fw-semibold text-muted">Portal API SUNAT</span>
+  </li>
+  }
+</ul>

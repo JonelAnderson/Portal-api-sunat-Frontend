@@ -1,0 +1,37 @@
+<ul class="navbar-nav ms-auto">
+  <li>
+    <a href="#" (click)="toggleFullscreen()" [attr.title]="screenFull ? 'Salir de pantalla completa' : 'Pantalla completa'">
+      <em class="feather" [ngClass]="screenFull ? 'icon-minimize' : 'icon-maximize'"></em>
+    </a>
+  </li>
+  <li>
+    <div class="dropdown drp-user" ngbDropdown placement="auto">
+      <a href="#" ngbDropdownToggle aria-label="Menú del usuario">
+        <img [src]="userImage" class="img-radius wid-40" alt="Usuario" />
+      </a>
+      <div class="dropdown-menu dropdown-menu-end profile-notification" ngbDropdownMenu>
+        <div class="pro-head">
+          <img [src]="userImage" class="img-radius" alt="Usuario" />
+          <span class="font-size-10">{{ userName() }}@if (userEmail() && userEmail() !== userName()) {<small class="d-block">{{ userEmail() }}</small>}</span>
+          <a href="#" class="dud-logout" title="Cerrar sesión" (click)="logout()">
+            <em class="feather icon-log-out"></em>
+          </a>
+        </div>
+        <ul class="pro-body">
+          <li>
+            <a href="#" class="dropdown-item" (click)="openAccount()">
+              <em class="feather icon-user"></em>
+              Mi cuenta (contraseña y verificación)
+            </a>
+          </li>
+          <li>
+            <a href="#" class="dropdown-item" (click)="logout()">
+              <em class="feather icon-log-out"></em>
+              Cerrar sesión
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </li>
+</ul>

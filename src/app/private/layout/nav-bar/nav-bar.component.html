@@ -1,0 +1,43 @@
+@if (this.gradientConfig.layout === 'horizontal' && this.gradientConfig.subLayout === 'horizontal-2') {
+  <div class="container">
+    <ng-container *ngTemplateOutlet="mainHeader"></ng-container>
+  </div>
+} @else {
+  <div class="m-header">
+    <a href="#" class="mobile-menu" id="mobile-collapse" title="Click to Menu Collapse" (click)="navCollapse()"><span></span></a>
+    <a href="#" class="header-mobile-collapse" id="mobile-collapse1" (click)="navCollapseMob()">
+      <em class="feather icon-menu"></em>
+    </a>
+    <a [routerLink]="['/private/home']" class="b-brand">
+      <!-- <img id="main-logo" src="assets/images/logo.png" alt="logo-img" class="logo" />
+      <img src="assets/images/logo-icon.png" alt="logo-icon-img" class="logo-thumb" /> -->
+      <span class="b-title">Portal API SUNAT</span>
+    </a>
+    <a class="mob-toggler" [ngClass]="{ on: this.menuClass }" href="#" (click)="toggleMobOption()">
+      <em class="feather icon-more-vertical"></em>
+    </a>
+  </div>
+  <div class="collapse navbar-collapse" [style.display]="this.collapseStyle">
+    <app-nav-left class="me-auto flex-grow-1" />
+    <app-nav-right class="ms-auto" />
+  </div>
+}
+<ng-template #mainHeader>
+  <div class="m-header">
+    <a href="#" class="mobile-menu" id="mobile-collapse" title="Click to Menu Collapse" (click)="navCollapse()"><span></span></a>
+    <a href="#" class="header-mobile-collapse" id="mobile-collapse1" (click)="this.NavCollapsedMob.emit()">
+      <em class="feather icon-menu"></em>
+    </a>
+    <a [routerLink]="['/private/home']" class="b-brand">
+      <img id="main-logo" src="assets/images/logo.png" alt="logo-img" class="logo" />
+      <img src="assets/images/logo-icon.png" alt="logo-icon-img" class="logo-thumb" />
+    </a>
+    <a class="mob-toggler" [ngClass]="{ on: this.menuClass }" href="#" (click)="toggleMobOption()">
+      <em class="feather icon-more-vertical"></em>
+    </a>
+  </div>
+  <div class="collapse navbar-collapse" [style.display]="this.collapseStyle">
+    <app-nav-left class="me-auto flex-grow-1" />
+    <app-nav-right class="ms-auto" />
+  </div>
+</ng-template>

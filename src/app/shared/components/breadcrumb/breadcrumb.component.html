@@ -1,0 +1,35 @@
+@if (navigationList && navigationList.length > 0) {
+<div class="page-header">
+  <div class="page-block">
+    <div class="row align-items-center">
+      <div class="col-md-12">
+        <div class="page-header-title">
+          <h5 class="m-b-10">Gestión de {{ navigationList[navigationList.length - 1].title | translate }}</h5>
+        </div>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item m-b-10">
+            @if (type() === 'theme2') {
+            <a [routerLink]="['/']" title="Home"><em class="feather icon-home"></em></a>
+            }
+            @if (type() === 'theme1') {
+            <a [routerLink]="['/']">{{ 'Home' | translate }}</a>
+            }
+          </li>
+          @for (breadcrumb of navigationList; track $index) {
+          @if (breadcrumb.url !== false) {
+          <li class="breadcrumb-item">
+            <a [routerLink]="breadcrumb.url">{{ breadcrumb.title | translate }}</a>
+          </li>
+          }
+          @if (breadcrumb.url === false && breadcrumb.type !== 'group') {
+          <li class="breadcrumb-item">
+            <a href="#">{{ breadcrumb.title | translate }}</a>
+          </li>
+          }
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+}

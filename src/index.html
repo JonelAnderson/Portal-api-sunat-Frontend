@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="utf-8" />
+    <!-- Cada pantalla pone su propio título (CustomTitleService); este se ve mientras carga. -->
+    <title>Portal API SUNAT</title>
+    <base href="/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Portal API SUNAT: consulte los comprobantes de su empresa, su uso del mes y las credenciales de la API de facturación electrónica." />
+    <meta name="application-name" content="Portal API SUNAT" />
+    <meta name="apple-mobile-web-app-title" content="Portal API SUNAT" />
+
+    <!-- Sitio con inicio de sesión (el enlace de activación lleva un token): que los buscadores no lo indexen ni sigan sus enlaces. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- Sin el detalle de la URL al abrir enlaces externos; nginx envía además Referrer-Policy. -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <!-- Que el celular no convierta RUC, DNI ni montos en enlaces de llamada. -->
+    <meta name="format-detection" content="telephone=no" />
+
+    <meta name="theme-color" content="#4099ff" />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" href="assets/images/logo-icon.png" />
+
+    <!-- Fuentes e íconos se empaquetan desde node_modules (angular.json → styles): no se carga nada de otros dominios (CSP). -->
+  </head>
+  <body>
+    <app-root></app-root>
+    <!-- Solo se ve si el navegador tiene JavaScript desactivado. Estilos en línea: sin JavaScript no carga el CSS de la app
+         (la CSP permite style en línea; no hay scripts). -->
+    <noscript>
+      <div style="max-width: 640px; margin: 40px auto; padding: 24px; font-family: Arial, sans-serif; color: #1d2630; line-height: 1.5; border: 1px solid #dbe0e5; border-radius: 8px;">
+        <h1 style="font-size: 20px; margin: 0 0 8px;">Para usar el Portal API SUNAT active JavaScript</h1>
+        <p style="margin: 0 0 16px;">
+          Su navegador tiene JavaScript desactivado y el sistema lo necesita para funcionar. Actívelo así y luego recargue
+          la página (tecla <b>F5</b>):
+        </p>
+        <ul style="margin: 0 0 16px; padding-left: 20px;">
+          <li style="margin-bottom: 6px;"><b>Google Chrome:</b> menú <b>⋮</b> → <b>Configuración</b> → <b>Privacidad y seguridad</b> →
+            <b>Configuración de sitios</b> → <b>JavaScript</b> → elija <b>Los sitios pueden usar JavaScript</b>.</li>
+          <li style="margin-bottom: 6px;"><b>Microsoft Edge:</b> menú <b>…</b> → <b>Configuración</b> → <b>Cookies y permisos del sitio</b> →
+            <b>JavaScript</b> → active <b>Permitido</b>.</li>
+          <li style="margin-bottom: 6px;"><b>Opera:</b> menú <b>O</b> → <b>Configuración</b> → <b>Privacidad y seguridad</b> →
+            <b>Configuración del sitio</b> → <b>JavaScript</b> → <b>Los sitios pueden usar JavaScript</b>.</li>
+          <li style="margin-bottom: 6px;"><b>Firefox:</b> viene activado. Si no funciona, revise si una extensión
+            (por ejemplo NoScript) está bloqueando esta página.</li>
+          <li style="margin-bottom: 6px;"><b>Celular Android (Chrome):</b> menú <b>⋮</b> → <b>Configuración</b> →
+            <b>Configuración de sitios</b> → <b>JavaScript</b> → actívelo.</li>
+          <li><b>iPhone (Safari):</b> <b>Ajustes</b> → <b>Safari</b> → <b>Avanzado</b> → active <b>JavaScript</b>.</li>
+        </ul>
+        <p style="margin: 0; color: #5b6b79;">
+          Si no puede cambiarlo (por ejemplo, en una computadora de la empresa con restricciones), pida ayuda al
+          administrador del sistema.
+        </p>
+      </div>
+    </noscript>
+  </body>
+</html>

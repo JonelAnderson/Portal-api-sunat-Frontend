@@ -1,0 +1,13 @@
+name: Deploy Portal de clientes API SUNAT (frontend) - QA
+on:
+  push:
+    branches: [deploy-qa]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Coolify Deployment
+        run: |
+          echo "Notificando a Coolify para iniciar el despliegue..."
+          curl --fail --request GET '${{ secrets.COOLIFY_QA_URL }}' \
+               --header 'Authorization: Bearer ${{ secrets.COOLIFY_QA_TOKEN }}'

@@ -1,0 +1,105 @@
+<div class="mfa-head">
+  <div class="mfa-head__icon" aria-hidden="true"><em class="feather icon-shield"></em></div>
+  <h1 class="mfa-head__title">Activar verificación en dos pasos</h1>
+  <p class="mfa-head__text">Por seguridad, todas las cuentas deben usar una app autenticadora.</p>
+</div>
+
+<ol class="mfa-steps" aria-label="Pasos">
+  @for (n of [1, 2, 3, 4]; track n) {
+  <li class="mfa-step" [class.active]="step() === n" [class.done]="step() > n" [attr.aria-current]="step() === n ? 'step' : null">
+    <span class="mfa-step__dot">
+      @if (step() > n) {<em class="feather icon-check" aria-hidden="true"></em><span class="visually-hidden">{{ n }}</span>} @else {<span>{{ n }}</span>}
+    </span>
+    <span class="mfa-step__label">{{ stepLabels[n - 1] }}</span>
+  </li>
+  }
+</ol>
+
+@switch (step()) {
+  @case (1) {
+    <div class="text-start">
+      <p class="mfa-lead"><strong>1. Instale una app autenticadora en su teléfono</strong></p>
+      <ul class="mfa-apps mb-3">
+        <li><em class="feather icon-smartphone" aria-hidden="true"></em>Google Authenticator (Android / iPhone)</li>
+        <li><em class="feather icon-smartphone" aria-hidden="true"></em>Microsoft Authenticator (Android / iPhone)</li>
+        <li><em class="feather icon-grid" aria-hidden="true"></em>O cualquier app compatible con códigos TOTP (Authy, etc.)</li>
+      </ul>
+    </div>
+    <div class="d-grid gap-2">
+      <button type="button" class="btn btn-primary mfa-btn" (click)="goToQr()">Ya la tengo, continuar</button>
+      <button type="button" class="btn btn-link mfa-link" (click)="back()">Volver</button>
+    </div>
+  }
+
+  @case (2) {
+    <p class="mfa-lead text-start"><strong>2. Escanee el código QR con la app</strong></p>
+    <div class="mfa-qr mb-3">
+      @if (qrDataUrl(); as qr) {
+        <img [src]="qr" width="220" height="220" alt="Código QR para la app autenticadora" />
+      } @else {
+        <span class="spinner-border text-primary" role="status" aria-hidden="true"></span>
+      }
+    </div>
+    @if (setup(); as s) {
+      <p class="small text-muted mb-1 text-center">¿No puede escanear? Ingrese esta clave a mano:</p>
+      <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+        <code class="mfa-key">{{ s.sharedKey }}</code>
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="copyKey()" title="Copiar clave" aria-label="Copiar clave">
+          <em class="feather" [class.icon-check]="keyCopied()" [class.icon-copy]="!keyCopied()"></em>
+        </button>
+      </div>
+    }
+    <div class="d-grid gap-2">
+      <button type="button" class="btn btn-primary mfa-btn" [disabled]="!setup() || loading()" (click)="step.set(3)">
+        Continuar
+      </button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="loading()" (click)="generate()">
+        <em class="feather icon-refresh-cw me-1" aria-hidden="true"></em>Volver a generar QR
+      </button>
+      <button type="button" class="btn btn-link mfa-link" (click)="step.set(1)">Atrás</button>
+    </div>
+  }
+
+  @case (3) {
+    <p class="mfa-lead text-start"><strong>3. Escriba el código de 6 dígitos que muestra la app</strong></p>
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control mfa-code-input"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        maxlength="6"
+        placeholder="000000"
+        [value]="code()"
+        [disabled]="loading()"
+        (input)="onCodeInput($event)"
+        (keydown.enter)="confirm()"
+        aria-label="Código de 6 dígitos"
+      />
+    </div>
+    <div class="d-grid gap-2">
+      <button type="button" class="btn btn-primary mfa-btn" [disabled]="code().length !== 6 || loading()" (click)="confirm()">
+        @if (loading()) {
+          <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Verificando...
+        } @else {
+          Activar
+        }
+      </button>
+      <button type="button" class="btn btn-link mfa-link" [disabled]="loading()" (click)="step.set(2)">Atrás</button>
+    </div>
+  }
+
+  @case (4) {
+    <p class="mfa-lead text-start"><strong>4. Guarde sus códigos de recuperación</strong></p>
+    <app-recovery-codes [codes]="recoveryCodes()" [userName]="userName()"></app-recovery-codes>
+    <div class="form-check text-start my-3 mfa-saved">
+      <input class="form-check-input" type="checkbox" id="mfaCodesSaved" [checked]="saved()"
+        (change)="saved.set($any($event.target).checked)" />
+      <label class="form-check-label" for="mfaCodesSaved">Los guardé en un lugar seguro</label>
+    </div>
+    <div class="d-grid">
+      <button type="button" class="btn btn-primary mfa-btn" [disabled]="!saved()" (click)="enter()">Entrar</button>
+    </div>
+  }
+}

@@ -1,0 +1,78 @@
+<div class="row btn-page">
+  <div class="col-12">
+    <div class="card">
+      <app-page-header icon="icon-bar-chart-2" title="USO DEL MES" subtitle="Comprobantes emitidos contra el cupo de su plan"></app-page-header>
+      <div class="card-body">
+        @if (!context.tenant()) {
+        <app-portal-empty icon="icon-briefcase" title="Su cuenta aún no tiene empresas vinculadas"
+          text="Pida a su proveedor que vincule su acceso a una empresa emisora."></app-portal-empty>
+        } @else if (loading()) {
+        <div class="erp-loading" role="status"><span class="spinner-border spinner-border-sm" aria-hidden="true"></span>Cargando…</div>
+        } @else if (notFound()) {
+        <app-portal-empty icon="icon-search" title="No encontramos esta empresa"
+          text="Puede que ya no tenga acceso a ella. Elija otra empresa en la barra superior o consulte con su proveedor."></app-portal-empty>
+        } @else if (error()) {
+        <app-portal-empty icon="icon-alert-triangle" title="No se pudo cargar el uso" [text]="error()">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="load()"><em class="feather icon-refresh-cw me-1"></em>Reintentar</button>
+        </app-portal-empty>
+        } @else if (usage(); as u) {
+
+        <div class="border rounded p-3 mb-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2">
+            <div>
+              <div class="small text-muted text-capitalize">{{ monthName() }}</div>
+              <div class="fs-4 fw-semibold erp-num">{{ quota() }}</div>
+              <div class="small text-muted">comprobantes emitidos este mes</div>
+            </div>
+            @if (percent() !== null) {
+            <span class="badge fs-6" [ngClass]="'badge-light-' + tone()">{{ percent() }} %</span>
+            }
+          </div>
+          @if (percent() !== null) {
+          <div class="progress mt-2" style="height: 10px" role="progressbar" [attr.aria-valuenow]="percent()" aria-valuemin="0" aria-valuemax="100"
+            [attr.aria-label]="'Cupo del mes usado: ' + percent() + ' por ciento'">
+            <div class="progress-bar" [ngClass]="'bg-' + tone()" [style.width.%]="percent()"></div>
+          </div>
+          @if (tone() === 'danger') {
+          <p class="small text-danger mt-2 mb-0">Alcanzó el cupo de su plan: no podrá emitir más comprobantes este mes. Consulte con su proveedor.</p>
+          } @else if (tone() === 'warning') {
+          <p class="small text-warning-emphasis mt-2 mb-0">Está cerca del cupo de su plan.</p>
+          }
+          } @else if (unlimited()) {
+          <p class="small text-muted mt-2 mb-0">Su plan no tiene tope mensual.</p>
+          }
+        </div>
+
+        <h6 class="erp-section-title">Últimos 6 meses</h6>
+        @if (bars().length) {
+        <div class="usage-chart" role="img" aria-label="Comprobantes por mes, de los 6 últimos meses (las cifras están en la tabla de abajo)">
+          @for (b of bars(); track b.month) {
+          <div class="usage-chart__col" [title]="b.title">
+            <span class="usage-chart__value">{{ b.documents.toLocaleString('es-PE') }}</span>
+            <div class="usage-chart__bar-wrap"><div class="usage-chart__bar" [class.usage-chart__bar--current]="b.current" [style.height.%]="b.height"></div></div>
+            <span class="usage-chart__label">{{ b.label }}</span>
+          </div>
+          }
+        </div>
+        <div class="table-responsive mt-3">
+          <table class="table table-sm align-middle small mb-0">
+            <caption class="visually-hidden">Comprobantes emitidos por mes</caption>
+            <thead><tr><th scope="col">Mes</th><th scope="col" class="text-end">Comprobantes</th></tr></thead>
+            <tbody>
+              @for (b of bars(); track b.month) {
+              <tr [class.fw-semibold]="b.current">
+                <td class="text-capitalize">{{ b.name }}@if (b.current) { <span class="badge badge-light-primary ms-1">Mes actual</span> }</td>
+                <td class="text-end erp-num">{{ b.documents.toLocaleString('es-PE') }}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        } @else {
+        <p class="small text-muted mb-0">Todavía no hay historial de uso.</p>
+        }
+        }
+      </div>
+    </div>
+  </div>
+</div>

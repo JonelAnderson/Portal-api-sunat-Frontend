@@ -1,0 +1,14 @@
+// Accesos directos de Inicio.
+.home-card {
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-1px);
+  }
+}
+
+.home-card__icon {
+  font-size: 26px;
+  line-height: 1;
+}
