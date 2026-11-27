@@ -12,6 +12,7 @@ services:
     networks:
       default:
       shared:
+        aliases: [sunat-portal-web]
 
 networks:
   shared:

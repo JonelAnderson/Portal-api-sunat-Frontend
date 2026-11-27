@@ -9,5 +9,5 @@ jobs:
       - name: Trigger Coolify Deployment
         run: |
           echo "Notificando a Coolify para iniciar el despliegue..."
-          curl --fail --request GET '${{ secrets.COOLIFY_PROD_URL }}' \
+          curl --fail --request POST '${{ secrets.COOLIFY_PROD_URL }}' \
                --header 'Authorization: Bearer ${{ secrets.COOLIFY_PROD_TOKEN }}'
